@@ -20,7 +20,7 @@ public class OrderController {
 
     @PostMapping
     public Order create(@RequestBody OrderDTO orderDTO) {
-        return service.create(order);
+        return service.create(orderDTO);
     }
 
     @GetMapping
@@ -36,7 +36,7 @@ public class OrderController {
 
     @PutMapping("/{id}")
     public Order update(@PathVariable Long id, @RequestBody OrderDTO orderDTO) {
-        return service.update(id, order);
+        return service.update(id, orderDTO);
     }
 
     @DeleteMapping("/{id}")

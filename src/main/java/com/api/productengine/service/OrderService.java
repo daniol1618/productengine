@@ -1,7 +1,10 @@
 package com.api.productengine.service;
 
+import com.api.productengine.dto.OrderDTO;
 import com.api.productengine.model.Order;
+import com.api.productengine.model.Product;
 import com.api.productengine.repository.OrderRepository;
+import com.api.productengine.repository.ProductRepository;
 import com.api.productengine.service.ProductService;
 import org.springframework.stereotype.Service;
 
@@ -23,14 +26,15 @@ public class OrderService {
 
     public Order create(OrderDTO orderDTO) {
         // throw exception if not found
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException("Invalid product.", HttpStatus.BAD_REQUEST));
+        Product product = productRepository.findById(orderDTO.getProductId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid product."));
 
+        Order order;
         try {
-            Order order = new Order(product, orderDTO.getPrice());
+            order = new Order(product, orderDTO.getPrice());
             order.isOrderValid();
         } catch (IllegalStateException e) {
-            throw new ResponseStatusException(e.getMessage(), HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
         return repository.save(order);
     }
@@ -41,23 +45,23 @@ public class OrderService {
 
     public Order findById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException("Order not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
     }
 
     public Order update(Long id, OrderDTO orderDTOUpdated) {
         Order existing = findById(id);
         // throw exception if not found
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException("Invalid product.", HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid product."));
 
         existing.setPrice(orderDTOUpdated.getPrice());
 
         try {
-            existing.setProduct(product);
-            Order order = new Order(product, orderDTO.getPrice());
+            existing.setOrderProduct(product);
+            Order order = new Order(product, orderDTOUpdated.getPrice());
             order.isOrderValid();
         } catch (IllegalStateException e) {
-            throw new ResponseStatusException(e.getMessage(), HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
 
         return repository.save(existing);

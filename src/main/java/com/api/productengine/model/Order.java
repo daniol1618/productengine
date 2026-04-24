@@ -27,13 +27,13 @@ public class Order {
     public Order(Product orderProduct, BigDecimal orderPrice) {
         product.removeStock(1);
         this.product = orderProduct;
-        this.price = price;
+        this.price = orderPrice;
     }
 
     // Getters and Setters
     public Long getId() { return id; }
 
-    public Integer getOrderProduct() { return product; }
+    public Product getOrderProduct() { return product; }
 
     public void setOrderProduct(Product product) {
         product.removeStock(1);
@@ -44,7 +44,7 @@ public class Order {
 
     public void setPrice(BigDecimal price) { this.price = price; }
 
-    public void isOrderValid() {
+    public boolean isOrderValid() {
         if (product == null) throw new IllegalStateException("Order must have a product");
         if (price == null) throw new IllegalStateException("Order must have a price");
         if (price.compareTo(BigDecimal.ZERO) <= 0) throw new IllegalStateException("Order price must be greater than zero");

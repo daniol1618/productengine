@@ -6,11 +6,11 @@ public class OrderDTO {
     private Long productId;
     private BigDecimal price;
 
-    public getProductId() {
+    public long getProductId() {
         return productId;
     }
 
-    public getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 }
