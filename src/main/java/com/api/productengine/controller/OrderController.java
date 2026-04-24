@@ -1,7 +1,6 @@
 package com.api.productengine.controller;
 
-import com.api.productengine.dto.OrderRequestDTO;
-import com.api.productengine.dto.OrderResponseDTO;
+
 import com.api.productengine.model.Order;
 import com.api.productengine.service.OrderService;
 import org.springframework.http.HttpStatus;
@@ -24,8 +23,8 @@ public class OrderController {
      * Crear una nueva orden
      */
     @PostMapping
-    public ResponseEntity<OrderResponseDTO> create(@RequestBody OrderRequestDTO request) {
-        OrderResponseDTO response = service.create(request);
+    public ResponseEntity<Order> create(@RequestBody Order request) {
+        Order response = service.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

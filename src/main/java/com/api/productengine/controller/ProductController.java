@@ -1,6 +1,5 @@
 package com.api.productengine.controller;
 
-import com.api.productengine.dto.ProductDTO;
 import com.api.productengine.model.Product;
 import com.api.productengine.service.ProductService;
 import org.springframework.web.bind.annotation.*;

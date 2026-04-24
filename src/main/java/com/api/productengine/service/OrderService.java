@@ -1,7 +1,6 @@
 package com.api.productengine.service;
 
-import com.api.productengine.dto.OrderRequestDTO;
-import com.api.productengine.dto.OrderResponseDTO;
+
 import com.api.productengine.exception.InsufficientStockException;
 import com.api.productengine.exception.InvalidOrderException;
 import com.api.productengine.exception.OrderNotFoundException;
@@ -30,16 +29,18 @@ public class OrderService {
      * Crear una nueva orden con validaciones de negocio.
      * Cada orden contiene un único producto con cantidad 1.
      */
-    public OrderResponseDTO create(OrderRequestDTO request) {
-        // Validar que se envió un productId
-        if (request.getProductId() == null) {
-            throw new InvalidOrderException("El ID del producto es requerido");
+    public Order create(Order request) {
+        // Validar que se envió un producto
+        if (request.getProduct() == null || request.getProduct().getId() == null) {
+            throw new InvalidOrderException("El producto y su ID son requeridos");
         }
+        
+        Long productId = request.getProduct().getId();
 
         // Validar que el producto existe
-        Product product = productRepository.findById(request.getProductId())
+        Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(
-                        "El producto con ID " + request.getProductId() + " no existe"));
+                        "El producto con ID " + productId + " no existe"));
 
         // Validar que el precio del producto es > 0 (saldo de la orden > $0)
         if (product.getPrice() == null || product.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
@@ -61,15 +62,8 @@ public class OrderService {
         product.setStock(product.getStock() - 1);
         productRepository.save(product);
 
-        // Retornar DTO
-        return new OrderResponseDTO(
-                savedOrder.getId(),
-                product.getId(),
-                product.getName(),
-                savedOrder.getTotalPrice(),
-                savedOrder.getStatus().toString(),
-                savedOrder.getCreatedAt()
-        );
+        // Retornar la orden guardada
+        return savedOrder;
     }
 
     /**
