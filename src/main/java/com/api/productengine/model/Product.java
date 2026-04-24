@@ -50,4 +50,11 @@ public class Product {
     public Integer getStock() { return stock; }
 
     public void setStock(Integer stock) { this.stock = stock; }
+
+    public void addStock(Integer quantity) { this.stock += quantity; }
+
+    public void removeStock(Integer quantity) {
+        if (quantity > this.stock) throw new IllegalStateException("Not enough stock");
+        this.stock -= quantity;
+    }
 }
