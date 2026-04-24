@@ -25,6 +25,7 @@ public class Order {
     public Order() {}
 
     public Order(Product orderProduct, BigDecimal orderPrice) {
+        product.removeStock(1);
         this.product = orderProduct;
         this.price = price;
     }
@@ -35,6 +36,7 @@ public class Order {
     public Integer getOrderProduct() { return product; }
 
     public void setOrderProduct(Product product) {
+        product.removeStock(1);
         this.product = product;
     }
 
