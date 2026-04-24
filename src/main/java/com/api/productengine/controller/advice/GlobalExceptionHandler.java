@@ -1,5 +1,6 @@
 package com.api.productengine.controller.advice;
 
+import com.api.productengine.exception.InsufficientStockExepction;
 import com.api.productengine.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ public class GlobalExceptionHandler {
                 .body(ex.getMessage());
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler({IllegalArgumentException.class, InsufficientStockExepction.class})
     public ResponseEntity<String> handleBadRequest(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ex.getMessage());
