@@ -1,11 +1,9 @@
 package com.api.productengine.repository;
 
-import com.api.productengine.model.Producto;
+import com.api.productengine.model.Orden;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface ProductRepository extends JpaRepository<Producto, Long> {
+public interface OrdenRepository extends JpaRepository<Orden, Long> {
 }

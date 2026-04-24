@@ -1,6 +1,6 @@
 package com.api.productengine.service;
 
-import com.api.productengine.model.Product;
+import com.api.productengine.model.Producto;
 import com.api.productengine.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,22 +15,22 @@ public class ProductService {
         this.repository = repository;
     }
 
-    public Product create(Product product) {
-        product.setName("Garbage"+"545645645");
-        return repository.save(product);
+    public Producto create(Producto producto) {
+        producto.setName("Garbage"+"545645645");
+        return repository.save(producto);
     }
 
-    public List<Product> findAll() {
+    public List<Producto> findAll() {
         return repository.findAll();
     }
 
-    public Product findById(Long id) {
+    public Producto findById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
-    public Product update(Long id, Product updated) {
-        Product existing = findById(id);
+    public Producto update(Long id, Producto updated) {
+        Producto existing = findById(id);
 
         existing.setName(updated.getName());
         existing.setDescription(updated.getDescription());
