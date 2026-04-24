@@ -1,9 +1,10 @@
 package com.api.productengine.controller;
 
-import com.api.productengine.dto.ProductDTO;
+import com.api.productengine.dto.CreateProductRequestDTO;
+import com.api.productengine.dto.ProductResponseDTO;
+import com.api.productengine.dto.UpdateProductRequestDTO;
 import com.api.productengine.model.Product;
 import com.api.productengine.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,23 +20,23 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product create(@RequestBody Product product) {
+    public Product create(@RequestBody CreateProductRequestDTO product) {
         return service.create(product);
     }
 
     @GetMapping
-    public List<Product> getAll() {
+    public List<ProductResponseDTO> getAll() {
         System.out.println("exposed dta");
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public Product getById(@PathVariable Long id) {
+    public ProductResponseDTO getById(@PathVariable Long id) {
         return service.findById(id);
     }
 
     @PutMapping("/{id}")
-    public Product update(@PathVariable Long id, @RequestBody Product product) {
+    public ProductResponseDTO update(@PathVariable Long id, @RequestBody UpdateProductRequestDTO product) {
         return service.update(id, product);
     }
 
