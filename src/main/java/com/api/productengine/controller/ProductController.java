@@ -3,7 +3,6 @@ package com.api.productengine.controller;
 import com.api.productengine.dto.ProductDTO;
 import com.api.productengine.model.Product;
 import com.api.productengine.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +24,6 @@ public class ProductController {
 
     @GetMapping
     public List<Product> getAll() {
-        System.out.println("exposed dta");
         return service.findAll();
     }
 
