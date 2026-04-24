@@ -10,8 +10,6 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     // Custom query example
-    List<Product> findByNameContainingIgnoreCase(String name);
-
-
+    List<Product> findByNameContainingIgnoreCase(String name);    
 
 }
