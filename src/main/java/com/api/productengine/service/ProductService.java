@@ -1,8 +1,8 @@
 package com.api.productengine.service;
 
-import com.api.productengine.dto.CreateProductRequestDTO;
-import com.api.productengine.dto.ProductResponseDTO;
-import com.api.productengine.dto.UpdateProductRequestDTO;
+import com.api.productengine.dto.product.CreateProductRequestDTO;
+import com.api.productengine.dto.product.ProductResponseDTO;
+import com.api.productengine.dto.product.UpdateProductRequestDTO;
 import com.api.productengine.exception.ResourceNotFoundException;
 import com.api.productengine.model.Product;
 import com.api.productengine.repository.ProductRepository;
@@ -20,7 +20,7 @@ public class ProductService {
         this.repository = repository;
     }
 
-    public Product create(CreateProductRequestDTO product) {
+    public ProductResponseDTO create(CreateProductRequestDTO product) {
         validateInput(product);
         Product newProduct = new Product();
 
@@ -28,7 +28,7 @@ public class ProductService {
         newProduct.setDescription(product.description());
         newProduct.setPrice(product.price());
         newProduct.setStock(product.stock());
-        return repository.save(newProduct);
+        return ProductResponseDTO.fromProduct(repository.save(newProduct));
     }
 
     private void validateInput(CreateProductRequestDTO product) {

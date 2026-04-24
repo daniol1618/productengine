@@ -1,4 +1,4 @@
-package com.api.productengine.dto;
+package com.api.productengine.dto.product;
 
 import com.api.productengine.model.Product;
 

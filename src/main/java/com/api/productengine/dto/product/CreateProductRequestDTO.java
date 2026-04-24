@@ -1,8 +1,8 @@
-package com.api.productengine.dto;
+package com.api.productengine.dto.product;
 
 import java.math.BigDecimal;
 
-public record UpdateProductRequestDTO(
+public record CreateProductRequestDTO(
         String name,
         String description,
         BigDecimal price,

@@ -1,8 +1,8 @@
 package com.api.productengine.controller;
 
-import com.api.productengine.dto.CreateProductRequestDTO;
-import com.api.productengine.dto.ProductResponseDTO;
-import com.api.productengine.dto.UpdateProductRequestDTO;
+import com.api.productengine.dto.product.CreateProductRequestDTO;
+import com.api.productengine.dto.product.ProductResponseDTO;
+import com.api.productengine.dto.product.UpdateProductRequestDTO;
 import com.api.productengine.model.Product;
 import com.api.productengine.service.ProductService;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product create(@RequestBody CreateProductRequestDTO product) {
+    public ProductResponseDTO create(@RequestBody CreateProductRequestDTO product) {
         return service.create(product);
     }
 
