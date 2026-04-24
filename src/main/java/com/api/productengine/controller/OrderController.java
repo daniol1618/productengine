@@ -3,7 +3,6 @@ package com.api.productengine.controller;
 import com.api.productengine.dto.OrderDTO;
 import com.api.productengine.model.Order;
 import com.api.productengine.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
