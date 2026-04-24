@@ -53,7 +53,7 @@ public class ProductService {
         if (product.price() == null || product.price().compareTo(BigDecimal.ZERO) <= 0)
             throw new IllegalArgumentException("Product price must not be null or non Postive");
         if (product.stock() == null || product.stock() <= 0)
-            throw new IllegalArgumentException("Product price Stock not be null or non Postive");
+            throw new IllegalArgumentException("Product Stock must not be null or non Postive");
     }
 
     private Product getProductOrThrow(Long id) {

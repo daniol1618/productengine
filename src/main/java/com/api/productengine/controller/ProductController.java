@@ -31,12 +31,12 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ProductResponseDTO getById(@PathVariable Long id) {
+    public ProductResponseDTO getById(@PathVariable("id") Long id) {
         return service.findById(id);
     }
 
     @PutMapping("/{id}")
-    public ProductResponseDTO update(@PathVariable Long id, @RequestBody UpdateProductRequestDTO product) {
+    public ProductResponseDTO update(@PathVariable("id") Long id, @RequestBody UpdateProductRequestDTO product) {
         return service.update(id, product);
     }
 
