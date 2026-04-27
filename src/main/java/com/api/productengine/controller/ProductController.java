@@ -1,7 +1,5 @@
 package com.api.productengine.controller;
 
-import com.api.productengine.exception.ErrorResponse;
-import com.api.productengine.exception.ProductNotFoundException;
 import com.api.productengine.model.Product;
 import com.api.productengine.service.ProductService;
 import org.springframework.http.HttpStatus;
