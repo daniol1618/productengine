@@ -11,6 +11,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     @OneToOne
     @JoinColumn(name = "product_id")
     // dado que es una relacion 1-1 se decidio crear la FK product_id en Order
