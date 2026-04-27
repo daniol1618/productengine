@@ -1,12 +1,11 @@
 package com.api.productengine.service;
 
-import com.api.productengine.exception.ProductNotFoundException;
+import com.api.productengine.controller.ResourceNotFoundException;
 import com.api.productengine.model.Product;
 import com.api.productengine.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -27,25 +26,21 @@ public class ProductService {
 
     public Product findById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+                .orElseThrow(() -> new ResourceNotFoundException("No product with id: " + id));
     }
 
     public Product update(Long id, Product updated) {
-        return repository.findById(id)
-                .map(existing -> {
-                    existing.setName(updated.getName());
-                    existing.setDescription(updated.getDescription());
-                    existing.setPrice(updated.getPrice());
-                    existing.setStock(updated.getStock());
-                    return repository.save(existing);
-                })
-                .orElseThrow(() -> new ProductNotFoundException(id));
+        Product existing = findById(id);
+
+        existing.setName(updated.getName());
+        existing.setDescription(updated.getDescription());
+        existing.setPrice(updated.getPrice());
+        existing.setStock(updated.getStock());
+
+        return repository.save(existing);
     }
 
     public void delete(Long id) {
-        if (!repository.existsById(id)) {
-            throw new ProductNotFoundException(id);
-        }
         repository.deleteById(id);
     }
 }
