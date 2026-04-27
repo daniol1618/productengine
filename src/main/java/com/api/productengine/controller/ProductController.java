@@ -49,4 +49,34 @@ public class ProductController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
-}
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> search(@RequestParam String keyword, @RequestParam Double maxPrice) {
+        return ResponseEntity.ok(service.searchProducts(keyword, maxPrice));
+    }
+
+    @GetMapping("/total-value")
+    public ResponseEntity<Double> getTotalValue() {
+        return ResponseEntity.ok(service.getTotalStockValue());
+    }
+
+    @PatchMapping("/{id}/stock")
+    public ResponseEntity<Integer> updateStock(@PathVariable Long id, @RequestParam Integer newStock) {
+        return ResponseEntity.ok(service.updateStock(id, newStock));
+    }
+
+    @GetMapping("/average-price")
+    public ResponseEntity<java.math.BigDecimal> getAverage() {
+        return ResponseEntity.ok(service.getAveragePrice());
+    }
+
+    @GetMapping("/price-range")
+    public ResponseEntity<List<Product>> getPriceRange(@RequestParam java.math.BigDecimal min, @RequestParam java.math.BigDecimal max) {
+        return ResponseEntity.ok(service.getPriceRange(min, max));
+    }
+
+    @GetMapping("/out-of-stock")
+    public ResponseEntity<List<Product>> getOutOfStock() {
+        return ResponseEntity.ok(service.getOutOfStock());
+    }
+}
