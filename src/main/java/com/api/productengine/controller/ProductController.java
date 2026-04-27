@@ -1,6 +1,7 @@
 package com.api.productengine.controller;
 
 import com.api.productengine.dto.ProductDTO;
+import com.api.productengine.dto.ProductStockDTO;
 import com.api.productengine.model.Product;
 import com.api.productengine.service.ProductService;
 import org.springframework.http.HttpStatus;
@@ -55,5 +56,11 @@ public class ProductController {
         return ResponseEntity.ok(totalStockValue);
     }
 
-    
+    @PutMapping
+    public ResponseEntity<Product> updateStock(@PathVariable Long id, @RequestBody ProductStockDTO productStockDto) {
+        Product updated = service.updateStock(id, productStockDto);
+        return ResponseEntity.ok(updated);
+    }
+
+
 }
