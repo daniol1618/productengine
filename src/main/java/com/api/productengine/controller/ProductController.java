@@ -1,11 +1,7 @@
 package com.api.productengine.controller;
 
-import com.api.productengine.exception.ErrorResponse;
-import com.api.productengine.exception.ProductNotFoundException;
 import com.api.productengine.model.Product;
 import com.api.productengine.service.ProductService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,39 +10,35 @@ import java.util.List;
 @RequestMapping("/api/products")
 public class ProductController {
 
-    private final ProductService service;
+    private final ProductService servicio;
 
-    public ProductController(ProductService service) {
-        this.service = service;
+    public ProductController(ProductService servicio) {
+        this.servicio = servicio;
     }
 
     @PostMapping
-    public ResponseEntity<Product> create(@RequestBody Product product) {
-        Product created = service.create(product);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    public Product create(@RequestBody Product producto) {
+        return servicio.create(producto);
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAll() {
-        List<Product> products = service.findAll();
-        return ResponseEntity.ok(products);
+    public List<Product> getAll() {
+        System.out.println("exposed dta");
+        return servicio.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getById(@PathVariable Long id) {
-        Product product = service.findById(id);
-        return ResponseEntity.ok(product);
+    public Product getById(@PathVariable Long id) {
+        return servicio.findById(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product product) {
-        Product updated = service.update(id, product);
-        return ResponseEntity.ok(updated);
+    public Product update(@PathVariable Long id, @RequestBody Product producto) {
+        return servicio.update(id, producto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+    public void delete(@PathVariable Long id) {
+        servicio.delete(id);
     }
-}
+}
