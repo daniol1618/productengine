@@ -3,8 +3,11 @@ package com.api.productengine.service;
 import com.api.productengine.exception.ProductNotFoundException;
 import com.api.productengine.model.Product;
 import com.api.productengine.repository.ProductRepository;
+
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,5 +50,33 @@ public class ProductService {
             throw new ProductNotFoundException(id);
         }
         repository.deleteById(id);
+    }
+
+    public List<Product> searchProductsbyPrice(String keyword, Double maxPrice){
+        return repository.searchProducts(keyword, maxPrice);
+    }
+
+    public Double findTotalStockValue(){
+        return repository.findTotalStockValue();
+    }
+
+    public int updateProductStockById(Long id, Integer stock){
+        return repository.updateProductStock(id, stock);
+    }
+
+    public BigDecimal findAveragePrice(){
+        return repository.findAveragePrice();
+    }
+
+    public List<Product> findByPriceRange(BigDecimal min, BigDecimal max){
+        return repository.findByPriceRange(min, max);
+    }
+
+    public List<Product> findOutOfStockProducts(){
+        return repository.findOutOfStockProducts();
+    }
+
+    public List<Product> findByNameCaseInsensitive(String name){
+        return repository.findByNameCaseInsensitive(name);
     }
 }
