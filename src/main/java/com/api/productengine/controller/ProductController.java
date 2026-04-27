@@ -82,10 +82,20 @@ public class ProductController {
     }
 
     @GetMapping("/keyword")
-    public List<Product> findByKeywordAndMaxPrice(
+    public ResponseEntity<List<Product>> findByKeywordAndMaxPrice(
             @RequestParam @Nonnull String keyword,
             @RequestParam @Nonnull Double maxPrice) {
         
-        return service.findByKeywordAndMaxPrice(keyword, maxPrice);
+        List<Product> products = service.findByKeywordAndMaxPrice(keyword, maxPrice);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Product>> findByPriceRange(
+            @RequestParam @Nonnull BigDecimal minPrice,
+            @RequestParam @Nonnull BigDecimal maxPrice) {
+
+        List<Product> products = service.findByPriceRange(minPrice, maxPrice);
+        return ResponseEntity.ok(products);
     }
 }

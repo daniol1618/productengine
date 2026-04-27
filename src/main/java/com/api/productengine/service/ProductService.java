@@ -99,4 +99,16 @@ public class ProductService {
 
         return repository.searchProducts(keyword, maxPrice);
     }
+
+    public List<Product> findByPriceRange(BigDecimal minPrice, BigDecimal maxPrice) {
+        if (maxPrice.compareTo(BigDecimal.ZERO) < 0 || minPrice.compareTo(BigDecimal.ZERO) < 0) {
+            throw new BusinessException("Price cant be lower than 0");
+        }
+
+        if (minPrice.compareTo(maxPrice) > 0) {
+            throw new BusinessException("Max price can't be lower than min price");
+        }
+
+        return repository.findByPriceRange(minPrice, maxPrice);
+    }
 }
