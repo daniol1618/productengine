@@ -1,17 +1,23 @@
 package com.api.productengine.controller;
 
-import com.api.productengine.exception.ErrorResponse;
-import com.api.productengine.exception.ProductNotFoundException;
+import com.api.productengine.dto.ProductDTO;
+import com.api.productengine.dto.ProductStockDTO;
 import com.api.productengine.model.Product;
 import com.api.productengine.service.ProductService;
+
+import jakarta.annotation.Nonnull;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
+@Validated
 public class ProductController {
 
     private final ProductService service;
@@ -21,8 +27,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> create(@RequestBody Product product) {
-        Product created = service.create(product);
+    public ResponseEntity<Product> create(@RequestBody ProductDTO productDto) {
+        Product created = service.create(productDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
@@ -39,8 +45,8 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product product) {
-        Product updated = service.update(id, product);
+    public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody ProductDTO productDto) {
+        Product updated = service.update(id, productDto);
         return ResponseEntity.ok(updated);
     }
 
@@ -49,4 +55,54 @@ public class ProductController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
-}
+
+    @GetMapping("/total-value")
+    public ResponseEntity<Double> getTotalStockValue() {
+        Double totalStockValue = service.getTotalStockValue();
+        return ResponseEntity.ok(totalStockValue);
+    }
+
+    @PatchMapping("/{id}/stock")
+    public ResponseEntity<Product> updateStock(@PathVariable Long id, @RequestBody ProductStockDTO productStockDto) {
+        Product updated = service.updateStock(id, productStockDto);
+        return ResponseEntity.ok(updated);
+    }
+
+    @GetMapping("/average-price")
+    public ResponseEntity<BigDecimal> getAveragePrice() {
+        BigDecimal averagePrice = service.getAveragePrice();
+        return ResponseEntity.ok(averagePrice);
+    }
+
+    @GetMapping("/out-of-stock")
+    public ResponseEntity<List<Product>> findOutOfStock() {
+        List<Product> outOfStockProducts = service.findOutOfStock();
+        return ResponseEntity.ok(outOfStockProducts);
+    }
+
+    @GetMapping("/keyword")
+    public ResponseEntity<List<Product>> findByKeywordAndMaxPrice(
+            @RequestParam @Nonnull String keyword,
+            @RequestParam @Nonnull Double maxPrice) {
+        
+        List<Product> products = service.findByKeywordAndMaxPrice(keyword, maxPrice);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/price-range")
+    public ResponseEntity<List<Product>> findByPriceRange(
+            @RequestParam @Nonnull BigDecimal minPrice,
+            @RequestParam @Nonnull BigDecimal maxPrice) {
+
+        List<Product> products = service.findByPriceRange(minPrice, maxPrice);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/name")
+    public ResponseEntity<List<Product>> searchByName(
+            @RequestParam String name) {
+        
+        List<Product> products = service.findByName(name);
+        return ResponseEntity.ok(products);
+    }
+}
