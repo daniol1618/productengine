@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+<<<<<<< HEAD
+
+### Yaml ###
+**/application.yaml
+=======
+>>>>>>> e8a2b9512c745183a787f15bce0fd90212d72eeb

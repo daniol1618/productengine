@@ -1,14 +1,13 @@
-package com.api.productengine;
+package Ecommerce.Ecommerce;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ProductengineApplication {
+public class EcommerceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ProductengineApplication.class, args);
-		System.out.println("Hi Daniel!!");
+		SpringApplication.run(EcommerceApplication.class, args);
 	}
 
 }
