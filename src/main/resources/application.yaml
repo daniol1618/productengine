@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/demo_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: root
-    password: postgres
+    password: gL0m&sQ1
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
