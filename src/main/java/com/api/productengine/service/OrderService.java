@@ -1,6 +1,5 @@
 package com.api.productengine.service;
 
-import com.api.productengine.dto.OrderDTO;
 import com.api.productengine.model.Order;
 import com.api.productengine.model.Product;
 import com.api.productengine.repository.OrderRepository;
@@ -54,7 +53,6 @@ public class OrderService {
         Order existing = findById(id);
 
         existing.setProductId(updated.getProductId());
-        existing.setDescription(updated.getDescription());
 
         return orderRepository.save(existing);
     }
