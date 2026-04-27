@@ -1,8 +1,6 @@
 package com.api.productengine.service.impl;
 
-import com.api.productengine.dto.product.CreateProductRequestDTO;
-import com.api.productengine.dto.product.ProductResponseDTO;
-import com.api.productengine.dto.product.UpdateProductRequestDTO;
+import com.api.productengine.dto.product.*;
 import com.api.productengine.exception.ResourceNotFoundException;
 import com.api.productengine.model.Product;
 import com.api.productengine.repository.ProductRepository;
@@ -63,11 +61,53 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
+
     @Override
-    public List<ProductResponseDTO> findAll() {
-        return repository.findAll().stream()
-                .map(ProductResponseDTO::fromProduct)
-                .toList();
+    public List<ProductResponseDTO> findAll(String name, BigDecimal minPrice, BigDecimal maxPrice, Boolean outOfStock) {
+        boolean hasName = name != null && !name.isBlank();
+        boolean hasMin = minPrice != null;
+        boolean hasMax = maxPrice != null;
+
+        if (outOfStock != null) {
+            if (hasName || hasMin || hasMax) {
+                throw new IllegalArgumentException("outOfStock cannot be combined with other filters");
+            }
+
+            if (outOfStock) {
+                return repository.findOutOfStockProducts().stream()
+                        .map(ProductResponseDTO::fromProduct)
+                        .toList();
+            }
+            return repository.findInStockProducts().stream()
+                    .map(ProductResponseDTO::fromProduct)
+                    .toList();
+        }
+
+        if (hasName && hasMax && !hasMin) {
+            return repository.searchProducts(name, maxPrice.doubleValue()).stream()
+                    .map(ProductResponseDTO::fromProduct)
+                    .toList();
+        }
+
+        if (hasName && !hasMin) {
+            return repository.findByNameCaseInsensitive(name).stream()
+                    .map(ProductResponseDTO::fromProduct)
+                    .toList();
+        }
+
+        if (!hasName && hasMin && hasMax) {
+            return repository.findByPriceRange(minPrice, maxPrice).stream()
+                    .map(ProductResponseDTO::fromProduct)
+                    .toList();
+        }
+
+        if (!hasName && !hasMin && !hasMax) {
+            return repository.findAll().stream()
+                    .map(ProductResponseDTO::fromProduct)
+                    .toList();
+        }
+
+        throw new IllegalArgumentException("Unsupported combination of query params");
     }
 
     @Override
@@ -85,8 +125,21 @@ public class ProductServiceImpl implements ProductService {
         existing.setPrice(updated.price());
         existing.setStock(updated.stock());
 
-        existing = repository.save(existing);
-        return ProductResponseDTO.fromProduct(existing);
+        return ProductResponseDTO.fromProduct(repository.save(existing));
+    }
+
+    @Override
+    public ProductResponseDTO updateStock(Long id, UpdateStockRequestDTO request) {
+        if (request == null || request.newStock() == null || request.newStock() <= 0) {
+            throw new IllegalArgumentException("Stock must be greater than zero");
+        }
+
+        int rowsUpdated = repository.updateProductStock(id, request.newStock());
+        if (rowsUpdated == 0) {
+            throw new ResourceNotFoundException("Product not found");
+        }
+
+        return ProductResponseDTO.fromProduct(getProductOrThrow(id));
     }
 
     @Override
@@ -94,5 +147,16 @@ public class ProductServiceImpl implements ProductService {
         if(!repository.existsById(id)) throw new ResourceNotFoundException("Product not found");
         // TODO: validar constraint de ordenes existentes
         repository.deleteById(id);
+    }
+
+    @Override
+    public ProductStatsResponseDTO findStats() {
+        Double stockValue = repository.findTotalStockValue();
+        BigDecimal stock = stockValue == null ? BigDecimal.ZERO : BigDecimal.valueOf(stockValue);
+
+        BigDecimal averagePrice = repository.findAveragePrice();
+        averagePrice = averagePrice == null ? BigDecimal.ZERO : averagePrice;
+
+        return new ProductStatsResponseDTO(stock, averagePrice);
     }
 }

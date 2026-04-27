@@ -1,14 +1,12 @@
 package com.api.productengine.controller;
 
-import com.api.productengine.dto.product.CreateProductRequestDTO;
-import com.api.productengine.dto.product.ProductResponseDTO;
-import com.api.productengine.dto.product.UpdateProductRequestDTO;
+import com.api.productengine.dto.product.*;
 import com.api.productengine.service.ProductService;
-import com.api.productengine.service.impl.ProductServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -17,7 +15,7 @@ public class ProductController {
 
     private final ProductService service;
 
-    public ProductController(ProductServiceImpl service) {
+    public ProductController(ProductService service) {
         this.service = service;
     }
 
@@ -27,9 +25,13 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductResponseDTO>> getAll() {
-        System.out.println("exposed dta");
-        return ResponseEntity.ok(service.findAll());
+    public ResponseEntity<List<ProductResponseDTO>> getAll(
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "minPrice", required = false) BigDecimal minPrice,
+            @RequestParam(name = "maxPrice", required = false) BigDecimal maxPrice,
+            @RequestParam(name = "outOfStock", required = false) Boolean outOfStock
+    ) {
+        return ResponseEntity.ok(service.findAll(name, minPrice, maxPrice, outOfStock));
     }
 
     @GetMapping("/{id}")
@@ -38,8 +40,24 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> update(@PathVariable("id") Long id, @RequestBody UpdateProductRequestDTO product) {
+    public ResponseEntity<ProductResponseDTO> update(
+            @PathVariable("id") Long id,
+            @RequestBody UpdateProductRequestDTO product
+    ) {
         return ResponseEntity.ok(service.update(id, product));
+    }
+
+    @PatchMapping("/{id}/stock")
+    public ResponseEntity<ProductResponseDTO> updateStock(
+            @PathVariable("id") Long id,
+            @RequestBody UpdateStockRequestDTO newStock
+    ) {
+        return ResponseEntity.ok(service.updateStock(id, newStock));
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<ProductStatsResponseDTO> getStats(){
+        return ResponseEntity.ok(service.findStats());
     }
 
     @DeleteMapping("/{id}")

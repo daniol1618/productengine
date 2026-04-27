@@ -14,8 +14,6 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    List<Product> findByNameContainingIgnoreCase(String name);
-
     // 1. JPQL with Named Parameters
     @Query("SELECT p FROM Product p WHERE p.name LIKE %:keyword% AND p.price <= :maxPrice")
     List<Product> searchProducts(@Param("keyword") String keyword, @Param("maxPrice") Double maxPrice);
@@ -46,6 +44,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE UPPER(p.name) LIKE UPPER(CONCAT('%', :name, '%'))")
     List<Product> findByNameCaseInsensitive(@Param("name") String name);
 
-
+    // 8 Agregado personal, productos CON stock
+    @Query("SELECT p FROM Product p WHERE p.stock > 0")
+    List<Product> findInStockProducts();
 
 }
