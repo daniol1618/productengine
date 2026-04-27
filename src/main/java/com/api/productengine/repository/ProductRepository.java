@@ -18,7 +18,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     // 1. JPQL with Named Parameters
     @Query("SELECT p FROM Product p WHERE p.name LIKE %:keyword% AND p.price <= :maxPrice")
-    List<Product> searchProducts(@Param("keyword") String keyword, @Param("maxPrice") Double maxPrice);
+    List<Product> searchProducts(@Param("keyword") String keyword, @Param("maxPrice") BigDecimal maxPrice);
 
     // 2. Native Query (Standard SQL)
     @Query(value = "SELECT SUM(price * stock) FROM products", nativeQuery = true)

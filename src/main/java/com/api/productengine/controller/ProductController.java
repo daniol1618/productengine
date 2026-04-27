@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -49,4 +50,39 @@ public class ProductController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
-}
+    // 1
+    @GetMapping("/search")
+    public List<Product> search(@RequestParam String keyword, @RequestParam BigDecimal maxPrice) {
+        return service.search(keyword, maxPrice);
+    }
+    // 2
+    @GetMapping("/total-value")
+    public double getTotalValue() {
+        return service.getTotalInventoryValue();
+    }
+    // 3
+    @PatchMapping("/{id}/stock")
+    public void updateStock(@PathVariable Long id, @RequestBody Integer newStock) {
+        service.updateStock(id, newStock);
+    }
+    // 4
+    @GetMapping("/average-price")
+    public BigDecimal getAverage() {
+        return service.getAveragePrice();
+    }
+    // 5
+    @GetMapping("/range")
+    public List<Product> getByRange(@RequestParam BigDecimal min, @RequestParam BigDecimal max) {
+        return service.getProductsByRange(min, max);
+    }
+    // 6
+    @GetMapping("/out-of-stock")
+    public List<Product> getEmptyStock() {
+        return service.getOutOfStock();
+    }
+    // 7
+    @GetMapping("/search-case")
+    public List<Product> searchCase(@RequestParam String name) {
+        return service.getByNameInsensitive(name);
+    }
+}
