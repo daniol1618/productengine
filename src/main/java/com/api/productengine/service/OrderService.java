@@ -5,7 +5,6 @@ import com.api.productengine.model.Order;
 import com.api.productengine.model.Product;
 import com.api.productengine.repository.OrderRepository;
 import com.api.productengine.repository.ProductRepository;
-import com.api.productengine.service.ProductService;
 import org.springframework.stereotype.Service;
 
 import org.springframework.web.server.ResponseStatusException;
