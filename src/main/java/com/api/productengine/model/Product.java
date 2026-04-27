@@ -1,7 +1,7 @@
 package com.api.productengine.model;
 
 import jakarta.persistence.*;
-        import java.math.BigDecimal;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "products")
