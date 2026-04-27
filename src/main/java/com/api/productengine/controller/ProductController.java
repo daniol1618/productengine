@@ -1,13 +1,12 @@
 package com.api.productengine.controller;
 
-import com.api.productengine.exception.ErrorResponse;
-import com.api.productengine.exception.ProductNotFoundException;
 import com.api.productengine.model.Product;
 import com.api.productengine.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -49,4 +48,61 @@ public class ProductController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
-}
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> search(@RequestParam String keyword, @RequestParam Double maxPrice) {
+        List<Product> products = service.findProducts(keyword, maxPrice);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/stock-value")
+    public ResponseEntity<Double> getTotalValue() {
+        Double totalValue = service.getTotalStockValue();
+        return ResponseEntity.ok(totalValue);
+    }
+
+    @PatchMapping("/{id}/stock")
+    public ResponseEntity<String> updateStock(@PathVariable Long id, @RequestParam Integer newStock) {
+        boolean updated = service.updateStock(id, newStock);
+        if (updated) {
+            return ResponseEntity.ok("Stock updated successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                 .body("No se encontró el producto con ID: " + id);
+        }
+    }
+
+    @GetMapping("/average-price")
+    public ResponseEntity<BigDecimal> getAveragePrice() {
+        BigDecimal averagePrice = service.getAveragePrice();
+        return ResponseEntity.ok(averagePrice);
+    }
+
+    @GetMapping("/price-range")
+    public ResponseEntity<List<Product>> getByPriceRange(@RequestParam BigDecimal min, @RequestParam BigDecimal max) {
+        List<Product> products = service.getProductsByPriceRange(min, max);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/out-of-stock")
+    public ResponseEntity<List<Product>> getOutOfStockProducts() {
+        List<Product> products = service.getOutOfStockProducts();
+
+        if(products.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/search-insensitive")
+    public ResponseEntity<List<Product>> searchCaseInsensitive(@RequestParam String name) {
+        List<Product> products = service.getByNameCaseInsensitive(name);
+
+        if(products.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(products);
+    }
+}
