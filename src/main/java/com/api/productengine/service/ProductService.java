@@ -43,4 +43,36 @@ public class ProductService {
     public void delete(Long id) {
         repository.deleteById(id);
     }
+
+    public List<Product> findByNameContaining(String name) {
+        return repository.findByNameContainingIgnoreCase(name);
+    }
+
+    public List<Product> searchProducts(String keyword, Double maxPrice) {
+        return repository.searchProducts(keyword, maxPrice);
+    }
+
+    public Double findTotalStockValue() {
+        return repository.findTotalStockValue();
+    }
+
+    public int updateProductStock(Long id, Integer newStock) {
+        return repository.updateProductStock(id, newStock);
+    }
+
+    public java.math.BigDecimal findAveragePrice() {
+        return repository.findAveragePrice();
+    }
+
+    public List<Product> findByPriceRange(java.math.BigDecimal min, java.math.BigDecimal max) {
+        return repository.findByPriceRange(min, max);
+    }
+
+    public List<Product> findOutOfStockProducts() {
+        return repository.findOutOfStockProducts();
+    }
+
+    public List<Product> findByNameCaseInsensitive(String name) {
+        return repository.findByNameCaseInsensitive(name);
+    }
 }

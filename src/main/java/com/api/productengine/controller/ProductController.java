@@ -40,4 +40,46 @@ public class ProductController {
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }
+
+    // --- Custom Queries Endpoints ---
+
+    @GetMapping("/search/name")
+    public List<Product> findByNameContaining(@RequestParam String name) {
+        return service.findByNameContaining(name);
+    }
+
+    @GetMapping("/search")
+    public List<Product> searchProducts(@RequestParam String keyword, @RequestParam Double maxPrice) {
+        return service.searchProducts(keyword, maxPrice);
+    }
+
+    @GetMapping("/stock/value")
+    public Double findTotalStockValue() {
+        return service.findTotalStockValue();
+    }
+
+    @PutMapping("/{id}/stock")
+    public int updateProductStock(@PathVariable Long id, @RequestParam Integer newStock) {
+        return service.updateProductStock(id, newStock);
+    }
+
+    @GetMapping("/price/average")
+    public java.math.BigDecimal findAveragePrice() {
+        return service.findAveragePrice();
+    }
+
+    @GetMapping("/price/range")
+    public List<Product> findByPriceRange(@RequestParam java.math.BigDecimal min, @RequestParam java.math.BigDecimal max) {
+        return service.findByPriceRange(min, max);
+    }
+
+    @GetMapping("/stock/empty")
+    public List<Product> findOutOfStockProducts() {
+        return service.findOutOfStockProducts();
+    }
+
+    @GetMapping("/search/name/insensitive")
+    public List<Product> findByNameCaseInsensitive(@RequestParam String name) {
+        return service.findByNameCaseInsensitive(name);
+    }
 }
