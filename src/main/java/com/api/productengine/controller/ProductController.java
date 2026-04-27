@@ -56,25 +56,25 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
+    @GetMapping("/total-value")
     public ResponseEntity<Double> getTotalStockValue() {
         Double totalStockValue = service.getTotalStockValue();
         return ResponseEntity.ok(totalStockValue);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}/stock")
     public ResponseEntity<Product> updateStock(@PathVariable Long id, @RequestBody ProductStockDTO productStockDto) {
         Product updated = service.updateStock(id, productStockDto);
         return ResponseEntity.ok(updated);
     }
 
-    @GetMapping
+    @GetMapping("/average-price")
     public ResponseEntity<BigDecimal> getAveragePrice() {
         BigDecimal averagePrice = service.getAveragePrice();
         return ResponseEntity.ok(averagePrice);
     }
 
-    @GetMapping
+    @GetMapping("/out-of-stock")
     public ResponseEntity<List<Product>> findOutOfStock() {
         List<Product> outOfStockProducts = service.findOutOfStock();
         return ResponseEntity.ok(outOfStockProducts);
@@ -89,7 +89,7 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
-    @GetMapping
+    @GetMapping("/price-range")
     public ResponseEntity<List<Product>> findByPriceRange(
             @RequestParam @Nonnull BigDecimal minPrice,
             @RequestParam @Nonnull BigDecimal maxPrice) {
@@ -98,7 +98,7 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
-    @GetMapping("/search/name")
+    @GetMapping("/name")
     public ResponseEntity<List<Product>> searchByName(
             @RequestParam String name) {
         
