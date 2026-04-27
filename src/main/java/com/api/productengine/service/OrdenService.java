@@ -24,7 +24,6 @@ public class OrdenService {
         this.repositorioProductos = repositorioProductos;
     }
 
-    @Transactional
     public Orden crearOrden(OrdenDTO ordenDTO){
         if (ordenDTO.getCantidad() == null || ordenDTO.getCantidad() != 1){
             throw new ExcepcionReglaNegocio("La orden debe contener 1 producto");
