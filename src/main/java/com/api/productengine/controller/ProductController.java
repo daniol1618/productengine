@@ -1,9 +1,9 @@
 package com.api.productengine.controller;
 
 import com.api.productengine.dto.ProductDTO;
+import com.api.productengine.mapper.ProductMapper;
 import com.api.productengine.model.Product;
 import com.api.productengine.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,35 +12,39 @@ import java.util.List;
 @RequestMapping("/api/products")
 public class ProductController {
 
-    private final ProductService service;
+    private final ProductService productService;
 
-    public ProductController(ProductService service) {
-        this.service = service;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
     @PostMapping
-    public Product create(@RequestBody Product product) {
-        return service.create(product);
+    public ProductDTO create(@RequestBody ProductDTO dto) {
+        Product product = ProductMapper.toEntity(dto);
+        return ProductMapper.toDTO(productService.create(product));
     }
 
     @GetMapping
-    public List<Product> getAll() {
-        System.out.println("exposed dta");
-        return service.findAll();
+    public List<ProductDTO> getAll() {
+        return productService.findAll()
+                .stream()
+                .map(ProductMapper::toDTO)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public Product getById(@PathVariable Long id) {
-        return service.findById(id);
+    public ProductDTO getById(@PathVariable Long id) {
+        return ProductMapper.toDTO(productService.findById(id));
     }
 
     @PutMapping("/{id}")
-    public Product update(@PathVariable Long id, @RequestBody Product product) {
-        return service.update(id, product);
+    public ProductDTO update(@PathVariable Long id, @RequestBody ProductDTO dto) {
+        Product product = ProductMapper.toEntity(dto);
+        return ProductMapper.toDTO(productService.update(id, product));
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        service.delete(id);
+        productService.delete(id);
     }
 }
