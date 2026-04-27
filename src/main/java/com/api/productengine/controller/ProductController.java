@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -49,4 +50,49 @@ public class ProductController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
-}
+
+    // Nuevos endpoints
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> search(
+            @RequestParam String keyword, 
+            @RequestParam Double maxPrice) {
+        return ResponseEntity.ok(service.search(keyword, maxPrice));
+    }
+
+    @GetMapping("/by-name")
+    public ResponseEntity<List<Product>> getByName(@RequestParam String name){
+        return ResponseEntity.ok(service.findByName(name));
+    }
+    
+
+    @GetMapping("/range")
+    public ResponseEntity<List<Product>> getByPriceRange(
+        @RequestParam BigDecimal min,
+        @RequestParam BigDecimal max){
+            return ResponseEntity.ok(service.findPriceInRange(min, max));
+        }
+    
+    @GetMapping("/out-of-stock")
+    public ResponseEntity<List<Product>> getOutOfStock() {
+        return ResponseEntity.ok(service.getOutOfStock());
+    }
+
+    @GetMapping("/stats/total-value")
+    public ResponseEntity<Double> getTotalValue() {
+        return ResponseEntity.ok(service.getTotalInventoryValue());
+    }
+
+    @GetMapping("/stats/average-price")
+    public ResponseEntity<BigDecimal> getAveragePrice() {
+        return ResponseEntity.ok(service.getAveragePrice());
+    }   
+
+    @PatchMapping("/{id}/stock")
+    public ResponseEntity<Void> updateStock(
+            @PathVariable Long id, 
+            @RequestParam Integer newStock) {
+        service.updateStock(id, newStock);
+        return ResponseEntity.noContent().build();
+    }
+}
