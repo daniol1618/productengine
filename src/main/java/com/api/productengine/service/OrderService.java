@@ -1,6 +1,7 @@
 package com.api.productengine.service;
 
 import com.api.productengine.dto.OrderDTO;
+import com.api.productengine.exception.ResourceNotFoundException;
 import com.api.productengine.model.Order;
 import com.api.productengine.model.Product;
 import com.api.productengine.repository.OrderRepository;
@@ -21,7 +22,7 @@ public class OrderService {
 
     public Order create(OrderDTO orderDTO) {
         Product product = productRepository.findById(orderDTO.getProductId())
-                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
         if (product.getStock() < 1)
             throw new IllegalArgumentException("El producto no cuenta con el stock suficiente");
         if(orderDTO.getSaldo() <= 0.0)
@@ -36,7 +37,7 @@ public class OrderService {
 
     public Order findById(Long id) {
         return orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
     }
 
     public void delete(Long id) {
