@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -49,4 +50,45 @@ public class ProductController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
-}
+
+    @GetMapping("/stats/average-price")
+    public ResponseEntity<BigDecimal> getAveragePrice() {
+        return ResponseEntity.ok(service.getAveragePrice());
+    }
+
+    @GetMapping("/stats/total-stock-value")
+    public ResponseEntity<Double> getTotalStockValue() {
+        return  ResponseEntity.ok(service.getTotalStockValue());
+    }
+
+    @PatchMapping("/{id}/stock")
+    public ResponseEntity<Product> updateStock(@PathVariable Long id, @RequestParam Integer newStock) {
+        return ResponseEntity.ok(service.updateStock(id, newStock));
+    }
+
+    @GetMapping(params = "name")
+    public ResponseEntity<List<Product>> searchByName(@RequestParam String name) {
+        return ResponseEntity.ok(service.findByNameContainingIgnoreCase(name));
+    }
+
+    @GetMapping(params = {"name", "maxPrice"})
+    public ResponseEntity<List<Product>> searchByNameAndPrice(
+            @RequestParam String name,
+            @RequestParam Double maxPrice) {
+        return ResponseEntity.ok(service.searchByNameAndPrice(name, maxPrice));
+    }
+
+    @GetMapping(params = {"minPrice", "maxPrice"})
+    public ResponseEntity<List<Product>> getByPriceRange(
+            @RequestParam BigDecimal minPrice,
+            @RequestParam BigDecimal maxPrice) {
+        return ResponseEntity.ok(service.findByPriceRange(minPrice, maxPrice));
+    }
+
+    @GetMapping(params = "outOfStock")
+    public ResponseEntity<List<Product>> getOutOfStock() {
+        return ResponseEntity.ok(service.findOutOfStock());
+    }
+
+
+}

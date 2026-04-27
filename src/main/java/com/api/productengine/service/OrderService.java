@@ -56,7 +56,6 @@ public class OrderService {
                 .orElseThrow(() -> new OrderNotFoundException(id));
     }
 
-
     public void delete(Long id) {
         if (!repository.existsById(id)) {
             throw new OrderNotFoundException(id);
