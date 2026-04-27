@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
-
+// HOLA ESTO ES UN CAMBIO DE PRUEBA
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
