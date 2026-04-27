@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -49,4 +50,43 @@ public class ProductController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
-}
+
+    // METODOS DEL SERVICE Q VIENEN DEL REPOSITORY
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> searchProducts(@RequestParam String a, @RequestParam Double b){
+        List<Product> products = service.searchProducts(a, b);
+        return ResponseEntity.ok(products);
+    }
+    @GetMapping("/searchTotal")
+    public ResponseEntity<Double> getTotalValue(){
+        Double total = service.getTotalValue();
+        System.out.println("El valor total calculado es: " + total);
+        return ResponseEntity.ok(total);
+    }
+    @PatchMapping("/UpdateStock/{id}")
+    public ResponseEntity<String> updateStock(@PathVariable Long id, @RequestParam("newStock") Integer newStock){
+        service.updateStock(id, newStock);
+        return ResponseEntity.ok("Stock actualizaado "+newStock);
+    }
+    @GetMapping("/Average")
+    public ResponseEntity<BigDecimal> getAveragePrice(){
+        BigDecimal average = service.getAveragePrice();
+        return ResponseEntity.ok(average);
+    }
+    @GetMapping("/Range")
+    public ResponseEntity<List<Product>> getByPriceRange(@RequestParam BigDecimal min, @RequestParam BigDecimal max){
+        List<Product> products = service.findByRange(min, max);
+        return ResponseEntity.ok(products);
+    }
+    @GetMapping("NoStock")
+    public ResponseEntity<List<Product>> getNoStock(){
+        List<Product> products = service.getOutOfStock();
+        return ResponseEntity.ok(products);
+    }
+    @GetMapping("Name")
+    public ResponseEntity<List<Product>> getProductByName(@RequestParam String name){
+        List<Product> products = service.findByNameInsensitive(name);
+        return ResponseEntity.ok(products);
+    }
+}
+
