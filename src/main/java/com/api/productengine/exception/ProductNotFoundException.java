@@ -1,6 +1,6 @@
 package com.api.productengine.exception;
 
-public class ProductNotFoundException extends RuntimeException {
+public class ProductNotFoundException extends ResourceNotFoundException {
 
     private final Long productId;
 
