@@ -1,10 +1,12 @@
 package com.api.productengine.service;
 
+import com.api.productengine.exception.ProductNotFoundException;
 import com.api.productengine.model.Product;
 import com.api.productengine.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -16,7 +18,6 @@ public class ProductService {
     }
 
     public Product create(Product product) {
-        product.setName("Garbage"+"545645645");
         return repository.save(product);
     }
 
@@ -25,22 +26,49 @@ public class ProductService {
     }
 
     public Product findById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+        try {
+            Optional<Product> result = repository.findById(id);
+            if (result.isEmpty()) {
+                throw new ProductNotFoundException(id);
+            }
+            return result.get();
+        } catch (ProductNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Unexpected error while fetching product with id: " + id, e);
+        }
     }
 
     public Product update(Long id, Product updated) {
-        Product existing = findById(id);
-
-        existing.setName(updated.getName());
-        existing.setDescription(updated.getDescription());
-        existing.setPrice(updated.getPrice());
-        existing.setStock(updated.getStock());
-
-        return repository.save(existing);
+        try {
+            Optional<Product> result = repository.findById(id);
+            if (result.isEmpty()) {
+                throw new ProductNotFoundException(id);
+            }
+            Product existing = result.get();
+            existing.setName(updated.getName());
+            existing.setDescription(updated.getDescription());
+            existing.setPrice(updated.getPrice());
+            existing.setStock(updated.getStock());
+            return repository.save(existing);
+        } catch (ProductNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Unexpected error while updating product with id: " + id, e);
+        }
     }
 
     public void delete(Long id) {
-        repository.deleteById(id);
+        try {
+            Optional<Product> result = repository.findById(id);
+            if (result.isEmpty()) {
+                throw new ProductNotFoundException(id);
+            }
+            repository.deleteById(id);
+        } catch (ProductNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Unexpected error while deleting product with id: " + id, e);
+        }
     }
 }
