@@ -32,7 +32,7 @@ public class OrderService {
         }
 
         Product product = productRepository.findById(request.productId())
-                .orElseThrow(() -> new ProductNotFoundException("El producto especificado no existe."));
+                .orElseThrow(() -> new ProductNotFoundException(request.productId()));
 
         if (product.getStock() < request.quantity()) {
             throw new NotEnoughStockException("El producto no cuenta con existencias suficientes.");
@@ -61,14 +61,14 @@ public class OrderService {
 
     public OrderResponseDTO findById(Long id) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException("La orden no existe."));
+                .orElseThrow(() -> new OrderNotFoundException(id));
         return mapToDTO(order);
     }
 
     @Transactional
     public OrderResponseDTO update(Long id, OrderRequestDTO request) {
         Order existingOrder = orderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException("La orden no existe."));
+                .orElseThrow(() -> new OrderNotFoundException(id));
 
         Product oldProduct = existingOrder.getProduct();
         oldProduct.setStock(oldProduct.getStock() + existingOrder.getQuantity());
@@ -79,7 +79,7 @@ public class OrderService {
         }
 
         Product newProduct = productRepository.findById(request.productId())
-                .orElseThrow(() -> new ProductNotFoundException("El producto especificado no existe."));
+                .orElseThrow(() -> new ProductNotFoundException(request.productId()));
 
         if (newProduct.getStock() < request.quantity()) {
             throw new NotEnoughStockException("El producto no cuenta con existencias suficientes.");
@@ -105,7 +105,7 @@ public class OrderService {
     @Transactional
     public void delete(Long id) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException("La orden no existe."));
+                .orElseThrow(() -> new OrderNotFoundException(id));
 
         Product product = order.getProduct();
         product.setStock(product.getStock() + order.getQuantity());
