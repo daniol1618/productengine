@@ -10,6 +10,5 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
     // Custom query example
-    List<Order> findByDescriptionContainingIgnoreCase(String name);
 
 }

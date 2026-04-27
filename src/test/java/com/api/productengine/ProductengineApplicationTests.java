@@ -32,7 +32,7 @@ class ProductengineApplicationTests {
 				new Product("Mouse", "Mouse gamer", BigDecimal.valueOf(50), 5)
 		);
 
-		Order order = new Order(product.getId(), "Compra mouse", 2);
+		Order order = new Order(product.getId(), 2);
 		Order savedOrder = orderService.create(order);
 
 		assertNotNull(savedOrder.getId());
@@ -46,7 +46,7 @@ class ProductengineApplicationTests {
 				new Product("Teclado", "Teclado mecánico", BigDecimal.valueOf(100), 5)
 		);
 
-		Order order = new Order(product.getId(), "Compra inválida", 0);
+		Order order = new Order(product.getId(), 0);
 
 		assertThrows(IllegalArgumentException.class, () -> {
 			orderService.create(order);

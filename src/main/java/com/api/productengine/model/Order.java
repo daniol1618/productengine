@@ -1,14 +1,11 @@
 package com.api.productengine.model;
 
 import jakarta.persistence.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Entity
 @Table(name = "orders")
 public class Order {
 
-    private static final Logger log = LoggerFactory.getLogger(Order.class);
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
