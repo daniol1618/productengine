@@ -48,4 +48,33 @@ public class ProductService {
         }
         repository.deleteById(id);
     }
+
+
+    public List<Product> searchProducts(String keyword, Double maxPrice) {
+        return repository.searchProducts(keyword, maxPrice);
+    }
+
+    public Double getTotalStockValue() {
+        return repository.findTotalStockValue();
+    }
+
+    public int updateStock(Long id, Integer newStock) {
+        return repository.updateProductStock(id, newStock);
+    }
+
+    public java.math.BigDecimal getAveragePrice() {
+        return repository.findAveragePrice();
+    }
+
+    public List<Product> getPriceRange(java.math.BigDecimal min, java.math.BigDecimal max) {
+        return repository.findByPriceRange(min, max);
+    }
+
+    public List<Product> getOutOfStock() {
+        return repository.findOutOfStockProducts();
+    }
+
+    public List<Product> getByNameInsensitive(String name) {
+        return repository.findByNameCaseInsensitive(name);
+    }
 }
