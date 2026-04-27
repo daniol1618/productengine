@@ -2,13 +2,12 @@ package com.api.productengine.dto;
 
 import java.math.BigDecimal;
 
-public class ProductDTO {
-    private String name;
-    private String description;
+public record ProductDTO (
+     String name,
+     String description,
+     BigDecimal price,
+     Integer stock
 
-    private BigDecimal price;
-
-    private Integer stock;
-
+){
 
 }
