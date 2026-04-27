@@ -1,13 +1,12 @@
 package com.api.productengine.controller;
 
-import com.api.productengine.exception.ErrorResponse;
-import com.api.productengine.exception.ProductNotFoundException;
 import com.api.productengine.model.Product;
 import com.api.productengine.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -49,4 +48,49 @@ public class ProductController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
-}
+
+    @GetMapping("/search")
+    public List<Product> searchProductsByNameAndMaxPrice(
+            @RequestParam("product-name") String productName,
+            @RequestParam("product-max-price")BigDecimal productMaxPrice
+    ){
+        return this.service.searchProductsByNameAndMaxPrice(productName,productMaxPrice);
+    }
+
+    @GetMapping("/total-stock-value")
+    public Double getTotalStockValue(){
+        return this.service.findTotalStockValue();
+    }
+
+    @PutMapping("/{id}/stock")
+    public int updateProductStock(@PathVariable Long id, @RequestParam("new-stock") Integer newStock){
+        return this.service.updateStock(id,newStock);
+    }
+
+    @GetMapping("/average-price")
+    public BigDecimal getAveragePrice(){
+        return this.service.getAveragePrice();
+    }
+
+    @GetMapping("/search/price-range")
+    public List<Product> getByPriceRange(
+            @RequestParam("min-price") BigDecimal minPrice,
+            @RequestParam("max-price") BigDecimal maxPrice
+    ){
+        return this.service.getByPriceRange(minPrice,maxPrice);
+    }
+
+    @GetMapping("/search/out-of-stock")
+    public List<Product> getOutOfStockProducts(){
+        return this.service.getOutOfStockProducts();
+    }
+
+    @GetMapping("/search/case-insensitive")
+    public List<Product> findByCaseInsensitive(
+            @RequestParam("name") String name
+    ){
+        return this.service.findByCaseInsensitive(name);
+    }
+
+
+}
