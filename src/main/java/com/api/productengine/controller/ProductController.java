@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/products")
@@ -49,4 +50,39 @@ public class ProductController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
-}
+
+    @GetMapping("/search")
+    public List<Product> searchProducts(@RequestParam String keyword, @RequestParam Double maxPrice) {
+        return service.searchProducts(keyword, maxPrice);
+    }
+
+    @GetMapping("/stock-value")
+    public Double findTotalStockValue() {
+        return service.findTotalStockValue();
+    }
+
+    @PutMapping("/{id}/stock")
+    public int updateProductStock(@PathVariable Long id, @RequestParam Integer newStock) {
+        return service.updateProductStock(id, newStock);
+    }
+
+    @GetMapping("/average-price")
+    public BigDecimal findAveragePrice() {
+        return service.findAveragePrice();
+    }
+
+    @GetMapping("/price-range")
+    public List<Product> findByPriceRange(@RequestParam BigDecimal min, @RequestParam BigDecimal max) {
+        return service.findByPriceRange(min, max);
+    }
+
+    @GetMapping("/out-of-stock")
+    public List<Product> findOutOfStockProducts() {
+        return service.findOutOfStockProducts();
+    }
+
+    @GetMapping("/search/name")
+    public List<Product> findByNameCaseInsensitive(@RequestParam String name) {
+        return service.findByNameCaseInsensitive(name);
+    }
+}
