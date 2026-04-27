@@ -1,7 +1,7 @@
 package com.api.productengine.model;
 
 import jakarta.persistence.*;
-        import java.math.BigDecimal;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "products")
@@ -12,42 +12,59 @@ public class Product {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String nombre;
 
-    private String description;
+    private String descripcion;
 
     @Column(nullable = false)
-    private BigDecimal price;
+    private BigDecimal precio;
 
     @Column(nullable = false)
     private Integer stock;
 
-    // Constructors
-    public Product() {}
+    public Product() {
+    }
 
-    public Product(String name, String description, BigDecimal price, Integer stock) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
+    public Product(String nombre, String descripcion, BigDecimal precio, Integer stock) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
         this.stock = stock;
     }
 
-    // Getters and Setters
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
+    public String getNombre() {
+        return nombre;
+    }
 
-    public void setName(String name) { this.name = name; }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-    public String getDescription() { return description; }
+    public String getDescripcion() {
+        return descripcion;
+    }
 
-    public void setDescription(String description) { this.description = description; }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-    public BigDecimal getPrice() { return price; }
+    public BigDecimal getPrecio() {
+        return precio;
+    }
 
-    public void setPrice(BigDecimal price) { this.price = price; }
+    public void setPrecio(BigDecimal precio) {
+        this.precio = precio;
+    }
 
-    public Integer getStock() { return stock; }
+    public Integer getStock() {
+        return stock;
+    }
 
-    public void setStock(Integer stock) { this.stock = stock; }
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
 }

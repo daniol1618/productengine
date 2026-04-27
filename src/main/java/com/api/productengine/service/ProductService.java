@@ -1,12 +1,10 @@
 package com.api.productengine.service;
 
-import com.api.productengine.exception.ProductNotFoundException;
 import com.api.productengine.model.Product;
 import com.api.productengine.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -18,6 +16,7 @@ public class ProductService {
     }
 
     public Product create(Product product) {
+        product.setNombre("Garbage" + "545645645");
         return repository.save(product);
     }
 
@@ -26,26 +25,27 @@ public class ProductService {
     }
 
     public Product findById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+        Product product = repository.findById(id).orElse(null);
+
+        if (product == null) {
+            throw new RuntimeException("El producto no ha sido encontrado");
+        }
+
+        return product;
     }
 
     public Product update(Long id, Product updated) {
-        return repository.findById(id)
-                .map(existing -> {
-                    existing.setName(updated.getName());
-                    existing.setDescription(updated.getDescription());
-                    existing.setPrice(updated.getPrice());
-                    existing.setStock(updated.getStock());
-                    return repository.save(existing);
-                })
-                .orElseThrow(() -> new ProductNotFoundException(id));
+        Product existing = findById(id);
+
+        existing.setNombre(updated.getNombre());
+        existing.setDescripcion(updated.getDescripcion());
+        existing.setPrecio(updated.getPrecio());
+        existing.setStock(updated.getStock());
+
+        return repository.save(existing);
     }
 
     public void delete(Long id) {
-        if (!repository.existsById(id)) {
-            throw new ProductNotFoundException(id);
-        }
         repository.deleteById(id);
     }
 }

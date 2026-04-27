@@ -1,10 +1,10 @@
+
 package com.api.productengine.repository;
 
-import com.api.productengine.model.Product;
+import com.api.productengine.model.Orden;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
-
+public interface RepositorioOrden extends JpaRepository<Orden, Long> {
 }
