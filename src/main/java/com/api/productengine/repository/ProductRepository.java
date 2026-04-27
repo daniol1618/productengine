@@ -14,11 +14,12 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+    // Custom query example
     List<Product> findByNameContainingIgnoreCase(String name);
 
     // 1. JPQL with Named Parameters
     @Query("SELECT p FROM Product p WHERE p.name LIKE %:keyword% AND p.price <= :maxPrice")
-    List<Product> searchProducts(@Param("keyword") String keyword, @Param("maxPrice") Double maxPrice);
+    List<Product> searchProductsByMaxPrice(@Param("keyword") String keyword, @Param("maxPrice") Double maxPrice);
 
     // 2. Native Query (Standard SQL)
     @Query(value = "SELECT SUM(price * stock) FROM products", nativeQuery = true)
@@ -29,6 +30,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Transactional
     @Query("UPDATE Product p SET p.stock = :newStock WHERE p.id = :id")
     int updateProductStock(@Param("id") Long id, @Param("newStock") Integer newStock);
+
+    //Devuelve cantidad updateada, 0 si no se pudo
+
+    //PREGUNTAR Returned value never used
 
     // 4. Aggregate JPQL (Average Price)
     @Query("SELECT AVG(p.price) FROM Product p")
