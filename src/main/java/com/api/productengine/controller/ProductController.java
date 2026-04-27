@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -27,9 +28,27 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAll() {
-        List<Product> products = service.findAll();
+    public ResponseEntity<List<Product>> getAll(
+        @RequestParam(name = "name", required = false) String name,
+        @RequestParam(name = "keyword", required = false) String keyword,
+        @RequestParam(name = "maxPrice", required = false) Double maxPrice,
+        @RequestParam(name = "minPrice", required = false) Double minPrice,
+        @RequestParam(name = "stock", required = false) Integer stock
+    ) {
+        List<Product> products = service.findAll(name, keyword, maxPrice, minPrice, stock);
         return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/totalValue")
+    public ResponseEntity<Double> getTotalValue() {
+        Double totalValue = service.getTotalStockValue();
+        return ResponseEntity.ok(totalValue);
+    }
+
+    @GetMapping("/priceAverage")
+    public ResponseEntity<BigDecimal> getAverageValue() {
+        BigDecimal averageValue = service.getAverageValue();
+        return ResponseEntity.ok(averageValue);
     }
 
     @GetMapping("/{id}")
@@ -49,4 +68,4 @@ public class ProductController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
-}
+}

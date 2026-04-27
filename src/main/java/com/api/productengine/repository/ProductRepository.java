@@ -25,6 +25,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Double findTotalStockValue();
 
     // 3. Modifying Query (Update)
+    //Este no se usa porque ya está creado en el controller update que es más preciso
     @Modifying
     @Transactional
     @Query("UPDATE Product p SET p.stock = :newStock WHERE p.id = :id")
