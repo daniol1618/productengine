@@ -7,7 +7,6 @@ import com.api.productengine.service.ProductService;
 
 import jakarta.annotation.Nonnull;
 
-import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -96,6 +95,14 @@ public class ProductController {
             @RequestParam @Nonnull BigDecimal maxPrice) {
 
         List<Product> products = service.findByPriceRange(minPrice, maxPrice);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/search/name")
+    public ResponseEntity<List<Product>> searchByName(
+            @RequestParam String name) {
+        
+        List<Product> products = service.findByName(name);
         return ResponseEntity.ok(products);
     }
 }

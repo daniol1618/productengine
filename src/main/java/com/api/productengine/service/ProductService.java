@@ -111,4 +111,8 @@ public class ProductService {
 
         return repository.findByPriceRange(minPrice, maxPrice);
     }
+
+    public List<Product> findByName(String name) {
+        return repository.findByNameCaseInsensitive(name);
+    }
 }
