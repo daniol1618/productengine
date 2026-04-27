@@ -4,8 +4,13 @@ import com.api.productengine.dto.ProductDTO;
 import com.api.productengine.dto.ProductStockDTO;
 import com.api.productengine.model.Product;
 import com.api.productengine.service.ProductService;
+
+import jakarta.annotation.Nonnull;
+
+import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -13,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
+@Validated
 public class ProductController {
 
     private final ProductService service;
@@ -73,5 +79,13 @@ public class ProductController {
     public ResponseEntity<List<Product>> findOutOfStock() {
         List<Product> outOfStockProducts = service.findOutOfStock();
         return ResponseEntity.ok(outOfStockProducts);
+    }
+
+    @GetMapping("/keyword")
+    public List<Product> findByKeywordAndMaxPrice(
+            @RequestParam @Nonnull String keyword,
+            @RequestParam @Nonnull Double maxPrice) {
+        
+        return service.findByKeywordAndMaxPrice(keyword, maxPrice);
     }
 }

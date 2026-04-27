@@ -91,4 +91,12 @@ public class ProductService {
     public List<Product> findOutOfStock() {
         return repository.findOutOfStockProducts();
     }
+
+    public List<Product> findByKeywordAndMaxPrice(String keyword, Double maxPrice) {
+        if (maxPrice < 0) {
+            throw new BusinessException("Max price can't be less than 0");
+        }
+
+        return repository.searchProducts(keyword, maxPrice);
+    }
 }
