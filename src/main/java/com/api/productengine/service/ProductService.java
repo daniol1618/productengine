@@ -5,6 +5,7 @@ import com.api.productengine.model.Product;
 import com.api.productengine.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,4 +49,33 @@ public class ProductService {
         }
         repository.deleteById(id);
     }
+    //1
+    public List<Product> searchProducts(String a, Double b){
+        return repository.searchProducts(a, b);
+    }
+    //2
+    public Double getTotalValue(){
+        return repository.findTotalStockValue();
+    }
+    //3
+    public void updateStock(Long id, Integer newStock){
+        repository.updateProductStock(id, newStock);
+    }
+    //4
+    public BigDecimal getAveragePrice (){
+        return repository.findAveragePrice();
+    }
+    //5
+    public List<Product> findByRange(BigDecimal min, BigDecimal max){
+        return repository.findByPriceRange(min, max);
+    }
+    //6
+    public List<Product> getOutOfStock(){
+        return repository.findOutOfStockProducts();
+    }
+    //7
+    public List<Product> findByNameInsensitive(String name){
+        return repository.findByNameCaseInsensitive(name);
+    }
 }
+
