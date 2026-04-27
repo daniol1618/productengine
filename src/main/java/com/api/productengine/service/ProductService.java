@@ -18,6 +18,10 @@ public class ProductService {
     }
 
     public Product create(Product product) {
+<<<<<<< main
+        //product.setName("Garbage"+"545645645");
+=======
+>>>>>>> main
         return repository.save(product);
     }
 
