@@ -48,4 +48,9 @@ public class ProductController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/low-stock")
+    public ResponseEntity<List<Product>> getLowStock(@RequestParam(defaultValue = "10") int threshold) {
+        return ResponseEntity.ok(service.findLowStock(threshold));
+    }
 }

@@ -48,4 +48,10 @@ public class ProductService {
         }
         repository.deleteById(id);
     }
+
+    public List<Product> findLowStock(int threshold) {
+        return repository.findAll().stream()
+                .filter(product -> product.getStock() < threshold)
+                .toList();
+    }
 }
