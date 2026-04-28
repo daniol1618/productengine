@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -14,4 +14,4 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
 app:
   scheduling:
-    product-save-cron: "*/10 * * * * *"
+    product-save-cron: "*/5 * * * * *"
