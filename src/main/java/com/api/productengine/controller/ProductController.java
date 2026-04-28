@@ -53,4 +53,23 @@ public class ProductController {
     public ResponseEntity<List<Product>> getLowStock(@RequestParam(defaultValue = "10") int threshold) {
         return ResponseEntity.ok(service.findLowStock(threshold));
     }
+
+    @GetMapping("/total-value")
+    public ResponseEntity<java.math.BigDecimal> getDiscountedTotal(@RequestParam(defaultValue = "0") double discount) {
+        return ResponseEntity.ok(service.calculateDiscountedTotalValue(discount));
+    }
+
+    @GetMapping("/report")
+    public ResponseEntity<List<String>> getInventoryReport() {
+        return ResponseEntity.ok(service.getFormattedInventoryReport());
+    }
+
+    @GetMapping("/most-expensive")
+    public ResponseEntity<Product> getMostExpensive() {
+        Product product = service.getMostExpensiveProductInStock();
+        if (product == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(product);
+    }
 }
