@@ -1,32 +1,25 @@
 package com.api.productengine.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "products")
-@Schema(description = "Represents a product in the system")
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(description = "Unique identifier of the product", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
     
     @Column(nullable = false)
-    @Schema(description = "Name of the product", example = "Laptop Pro")
     private String name;
     
-    @Schema(description = "Brief description of the product", example = "High-performance laptop for professionals")
     private String description;
     
     @Column(nullable = false)
-    @Schema(description = "Price of the product", example = "1299.99")
     private BigDecimal price;
     
     @Column(nullable = false)
-    @Schema(description = "Available stock quantity", example = "50")
     private Integer stock;
 
     // Constructors
