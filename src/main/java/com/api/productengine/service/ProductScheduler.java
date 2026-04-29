@@ -22,12 +22,9 @@ public class ProductScheduler {
     }
 
     /**
-     * @Scheduled enables the method to run periodically based on the configuration.
-     * The 'cron' attribute defines the execution schedule using a cron expression.
-     * '${app.scheduling.product-save-cron}' is a placeholder that retrieves the
-     * actual cron expression from the application.yaml file.
+     * This method is currently disabled to prevent automatic product creation.
      */
-    @Scheduled(cron = "${app.scheduling.product-save-cron}")
+//    @Scheduled(cron = "${app.scheduling.product-save-cron}")
     public void saveNewProduct() {
         Product product = new Product();
         product.setName("My Batch Product " + LocalDateTime.now());
