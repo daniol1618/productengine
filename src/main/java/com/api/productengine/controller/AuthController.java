@@ -5,6 +5,14 @@ import com.api.productengine.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.api.productengine.service.JwtService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Controller for authentication-related endpoints.
  */
@@ -13,15 +21,17 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserService userService;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, JwtService jwtService, AuthenticationManager authenticationManager) {
         this.userService = userService;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
     }
 
     /**
      * Endpoint to register a new user.
-     * @param user The user object containing registration details.
-     * @return The saved user object.
      */
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody User user) {
@@ -29,12 +39,23 @@ public class AuthController {
     }
 
     /**
-     * Endpoint to simulate a login check.
-     * This endpoint is protected and requires valid credentials to access.
-     * @return A success message if authenticated.
+     * Endpoint to login and receive a JWT.
      */
-    @GetMapping("/login")
-    public ResponseEntity<String> login() {
-        return ResponseEntity.ok("Login successful!");
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, String>> login(@RequestBody User loginRequest) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword()
+                )
+        );
+
+        UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
+        String token = jwtService.generateToken(userDetails);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("token", token);
+        
+        return ResponseEntity.ok(response);
     }
 }

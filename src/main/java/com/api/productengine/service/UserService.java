@@ -8,7 +8,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.Collections;
 
 /**
  * Service class for managing users and handling authentication.
@@ -50,7 +52,7 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),
-                new ArrayList<>() // Empty authorities for now
+                Collections.singletonList(new SimpleGrantedAuthority(user.getRole()))
         );
     }
 }

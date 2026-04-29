@@ -27,6 +27,11 @@
       "key": "password",
       "value": "password123",
       "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
     }
   ],
   "item": [
@@ -35,6 +40,65 @@
       "item": [
         {
           "name": "Register User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status is 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\",\n  \"role\": \"ROLE_ADMIN\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Registers a new user with an encrypted password. Includes ROLE_ADMIN by default for testing."
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status is 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const body = pm.response.json();",
+                  "if (body && body.token) {",
+                  "    pm.collectionVariables.set('jwt_token', body.token);",
+                  "    console.log('jwt_token set successfully');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -53,39 +117,11 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/api/auth/register",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "register"]
-            },
-            "description": "Registers a new user with an encrypted password."
-          }
-        },
-        {
-          "name": "Login User",
-          "request": {
-            "auth": {
-              "type": "basic",
-              "basic": [
-                {
-                  "key": "password",
-                  "value": "{{password}}",
-                  "type": "string"
-                },
-                {
-                  "key": "username",
-                  "value": "{{username}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "url": {
               "raw": "{{baseUrl}}/api/auth/login",
               "host": ["{{baseUrl}}"],
               "path": ["api", "auth", "login"]
             },
-            "description": "Performs a login using Basic Authentication."
+            "description": "Performs a login and automatically saves the returned JWT token to the 'jwt_token' variable."
           }
         }
       ]
@@ -93,6 +129,16 @@
     {
       "name": "Products",
       "description": "All endpoints under /api/products",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{jwt_token}}",
+            "type": "string"
+          }
+        ]
+      },
       "item": [
         {
           "name": "Create Product",
